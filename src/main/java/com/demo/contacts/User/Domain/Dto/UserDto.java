@@ -2,11 +2,10 @@ package com.demo.contacts.User.Domain.Dto;
 /*
 Dto user works as a model when it'll to receive data external
  */
-import com.demo.contacts.Contact.Persistence.Entity.ContactEntity;
 
 public class UserDto {
 
-    private int id;
+    private long id;
 
     private String name;
 
@@ -18,7 +17,7 @@ public class UserDto {
 
 //    private ContactEntity contact;
 
-    public UserDto(int id, String name, String lastName, String email, String password){
+    public UserDto(long id, String name, String lastName, String email, String password){
         this.id = id;
         this.name = name;
         this.lastName = lastName;
@@ -26,11 +25,11 @@ public class UserDto {
         this.password = password;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

@@ -24,25 +24,16 @@ public class UserServices {
         this.userRepository = userRepository;
     }
 
-//    public UserEntity createUser(UserEntity user) throws HandledException {
-//        try {
-//            return userRepository.save(user);
-//        } catch (Exception e) {
-//            // Handle the exception, log the error, and possibly perform other actions
-//            e.printStackTrace();
-//            throw new HandledException(DATABASE_EXCEPTION,"Failed to save User", e);
-//        }
-//        }
     public UserDto createUser(UserDto userDTO) {
         UserEntity user = UserMapper.INSTANCE.userDTOToUser(userDTO);
         UserEntity savedUser = userRepository.save(user);
         return UserMapper.INSTANCE.userToUserDTO(savedUser);
     }
-    public UserDto getUserById(Long userId) throws HandledException {
+    public UserDto getUserById(long userId) throws HandledException {
         try {
             UserEntity user= userRepository.findById(userId).orElse(null);
-            UserDto userById = UserMapper.INSTANCE.userToUserDTO(user);
-            return  userById;
+            UserDto userFindById = UserMapper.INSTANCE.userToUserDTO(user);
+            return  userFindById;
         } catch (Exception e) {
             e.printStackTrace();
             throw new HandledException(DATABASE_EXCEPTION,"Failed to get user", e);

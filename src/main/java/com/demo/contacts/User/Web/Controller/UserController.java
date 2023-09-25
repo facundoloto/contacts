@@ -1,9 +1,6 @@
 package com.demo.contacts.User.Web.Controller;
-
 import com.demo.contacts.Handled.HandledException;
 import com.demo.contacts.User.Domain.Dto.UserDto;
-import com.demo.contacts.User.Persistence.Mapper.UserMapper;
-import com.demo.contacts.User.Domain.Repository.UserRepository;
 import com.demo.contacts.User.Domain.Services.UserServices;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,10 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import com.demo.contacts.Crypto.CryptPassword;
 
     @RestController
-    @RequestMapping("/api/users")
+    @RequestMapping("/user")
     public class UserController {
         private final UserServices userService;
 
@@ -24,14 +21,15 @@ import org.springframework.web.bind.annotation.RestController;
         }
 
         @GetMapping("/{id}")
-        public UserDto getUserById(@PathVariable Long userId) throws HandledException {
-            return userService.getUserById(userId);
+        public UserDto getUserById(@PathVariable long id) throws HandledException {
+            return userService.getUserById(id);
         }
         @PostMapping("/")
         public UserDto createUser(@RequestBody UserDto userDTO) {
+            CryptPassword cryptPassword = new CryptPassword();
+            String hashPassword = cryptPassword.encoder(userDTO.getPassword());
+            userDTO.setPassword(hashPassword);
             return userService.createUser(userDTO);
         }
-        // Add endpoints for creating, updating, and deleting users
     }
-        // Other controller methods
 
