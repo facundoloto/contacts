@@ -6,6 +6,4 @@ import org.springframework.stereotype.Repository;
 Repository works with helps of JPA and contain methods to interact with a DB
  */
 @Repository
-public interface UserRepository extends JpaRepository<UserEntity, Long> {
-    UserEntity findByEmail(String email);
-}
+public interface UserRepository extends JpaRepository<UserEntity, Long>{};

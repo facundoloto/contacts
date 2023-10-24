@@ -17,13 +17,13 @@ public interface UserMapper {
 mapping works for adapt property to dto from entity
  */
     //this works to adapt entity properties to dto e.g database to client//
-    @Mapping(target = "id", source = "user.idUser")
+    @Mapping(target = "lastName", source = "user.lastName")
     //@Mapping(target = "password", ignore = true)
-    UserDto userToUserDTO(UserEntity user);
+    UserDto mapToDto(UserEntity user);
 /*
 this works different 'cause this adapt dto to entity e.g works when user send information and entity
  need get properties from dto
  */
-    @Mapping(target = "idUser", source = "userDTO.id")
-    UserEntity userDTOToUser(UserDto userDTO);
+    @Mapping(target = "lastName", source = "userDTO.lastName")
+    UserEntity mapToEntity(UserDto userDTO);
 }

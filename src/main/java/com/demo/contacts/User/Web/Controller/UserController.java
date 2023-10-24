@@ -22,14 +22,14 @@ import com.demo.contacts.Crypto.CryptPassword;
 
         @GetMapping("/{id}")
         public UserDto getUserById(@PathVariable long id) throws HandledException {
-            return userService.getUserById(id);
+            return userService.getById(id);
         }
         @PostMapping("/")
         public UserDto createUser(@RequestBody UserDto userDTO) {
             CryptPassword cryptPassword = new CryptPassword();
             String hashPassword = cryptPassword.encoder(userDTO.getPassword());
             userDTO.setPassword(hashPassword);
-            return userService.createUser(userDTO);
+            return userService.create(userDTO);
         }
     }
 
