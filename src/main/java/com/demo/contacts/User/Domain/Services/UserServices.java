@@ -22,22 +22,27 @@ public class UserServices extends ServiceBase<UserEntity, UserDto> {
     }
 
     @Override
-    public UserDto getById(Long id) {
+    public UserDto getById(Long id) throws Exception {
         return super.getById(id);
     }
 
+    /**
+     * @param userDto
+     * @return
+     */
     @Override
-    public UserDto create(UserDto userDto) {
-        return super.create(userDto);
+    public UserDto create(UserDto userDto) throws Exception {
+        UserDto user = super.create(userDto);
+        return user;
     }
 
     @Override
-    public UserDto update(Long id, UserDto userDto) {
+    public UserDto update(Long id, UserDto userDto) throws Exception {
         return super.update(id, userDto);
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Long id) throws Exception {
         super.delete(id);
     }
 

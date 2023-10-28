@@ -1,10 +1,12 @@
 package com.demo.contacts.Person;
 import jakarta.persistence.*;
+import java.io.Serializable;
 
-public class PersonEntity {
+@MappedSuperclass
+public class PersonEntity implements Serializable {
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
     @Column
     private String name;
@@ -18,6 +20,9 @@ public class PersonEntity {
         this.name = name;
         this.lastName = lastName;
         this.email = email;
+    }
+
+    public PersonEntity() {
     }
 
     public Long getId() {

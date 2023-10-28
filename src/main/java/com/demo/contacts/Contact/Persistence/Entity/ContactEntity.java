@@ -5,14 +5,17 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "contact")
-public class Contact extends PersonEntity {
+public class ContactEntity extends PersonEntity {
     @Column(name = "phone_number")
     private Long phoneNumber;
     @ManyToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "user_id")
     private UserEntity user;
 
-    public Contact(Long id, String name, String lastName, String email, Long phoneNumber, UserEntity user) {
+    public ContactEntity(){
+
+    }
+    public ContactEntity(Long id, String name, String lastName, String email, Long phoneNumber, UserEntity user) {
         super(id, name, lastName, email);
         this.phoneNumber = phoneNumber;
         this.user = user;

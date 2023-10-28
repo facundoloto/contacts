@@ -1,5 +1,5 @@
 package com.demo.contacts.User.Persistence.Entity;
-import com.demo.contacts.Contact.Persistence.Entity.Contact;
+import com.demo.contacts.Contact.Persistence.Entity.ContactEntity;
 import com.demo.contacts.Person.PersonEntity;
 import jakarta.persistence.*;
 
@@ -12,12 +12,15 @@ public class UserEntity extends PersonEntity {
     @Column
     private String password;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Contact> contacts = new ArrayList<>();
+    private List<ContactEntity> contactEntities = new ArrayList<>();
 
-    public UserEntity(Long id, String name, String lastName, String email, String password, List<Contact> contacts) {
+    public UserEntity(Long id, String name, String lastName, String email, String password, List<ContactEntity> contactEntities) {
         super(id, name, lastName, email);
         this.password = password;
-        this.contacts = contacts;
+        this.contactEntities = contactEntities;
+    }
+
+    public UserEntity() {
     }
 
     public String getPassword() {
@@ -28,11 +31,11 @@ public class UserEntity extends PersonEntity {
         this.password = password;
     }
 
-    public List<Contact> getContacts() {
-        return contacts;
+    public List<ContactEntity> getContacts() {
+        return contactEntities;
     }
 
-    public void setContacts(List<Contact> contacts) {
-        this.contacts = contacts;
+    public void setContacts(List<ContactEntity> contactEntities) {
+        this.contactEntities = contactEntities;
     }
 }
