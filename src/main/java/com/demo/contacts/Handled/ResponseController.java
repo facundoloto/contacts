@@ -19,4 +19,13 @@ public class ResponseController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
+
+    public ResponseEntity ResponseStatusHttpDelete(Boolean delete) {
+        if (delete) {
+            return ResponseEntity.status(HttpStatus.OK).body("Delete successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("it couldn't delete");
+        }
+    }
+
 }

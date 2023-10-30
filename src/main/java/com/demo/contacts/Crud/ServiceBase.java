@@ -5,8 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
-
 @Service
 public abstract class ServiceBase<Entity, Dto> {
     @Autowired
@@ -58,9 +56,15 @@ public abstract class ServiceBase<Entity, Dto> {
 
     }
 
-    public void delete(Long id) throws Exception {
+    public boolean delete(Long id) throws Exception {
         try {
+            // Check if the item exists before attempting to delete
+            if (!repository.existsById(id)) {
+                return false;
+            }
+
             repository.deleteById(id);
+            return true; // 204 No Content
         } catch (Exception e) {
             throw new Exception(HandledErrorDataBase.DELETE_ERROR.getMessage(), e);
         }

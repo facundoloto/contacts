@@ -1,15 +1,12 @@
 package com.demo.contacts.User.Web.Controller;
 
+import com.demo.contacts.Crypto.CryptPassword;
 import com.demo.contacts.Handled.ResponseController;
 import com.demo.contacts.User.Domain.Dto.UserDto;
 import com.demo.contacts.User.Domain.Services.UserServices;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import com.demo.contacts.Crypto.CryptPassword;
 
 @RestController
 @RequestMapping("/user")
@@ -36,5 +33,18 @@ public class UserController {
 
         return responseController.ResponseStatusHttp(user);
     }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity updateUser(@PathVariable long id, @RequestBody UserDto userDto) throws Exception {
+        UserDto user = userService.update(id, userDto);
+        return responseController.ResponseStatusHttp(user);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity deleteUser(@PathVariable long id) throws Exception {
+        boolean isDelete = userService.delete(id);
+        return responseController.ResponseStatusHttpDelete(isDelete);
+    }
+
 }
 

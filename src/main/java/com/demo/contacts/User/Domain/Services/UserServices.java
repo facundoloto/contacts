@@ -42,8 +42,8 @@ public class UserServices extends ServiceBase<UserEntity, UserDto> {
     }
 
     @Override
-    public void delete(Long id) throws Exception {
-        super.delete(id);
+    public boolean delete(Long id) throws Exception {
+      return super.delete(id);
     }
 
     @Override

@@ -28,8 +28,9 @@ public class ContactService extends ServiceBase<ContactEntity, ContactDto> {
     }
 
     @Override
-    public void delete(Long id) throws Exception {
+    public boolean delete(Long id) throws Exception {
         super.delete(id);
+        return false;
     }
 
     @Override
