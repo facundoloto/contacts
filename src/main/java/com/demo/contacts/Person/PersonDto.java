@@ -1,12 +1,13 @@
 package com.demo.contacts.Person;
 
+import jakarta.persistence.Column;
+
 public class PersonDto {
     private long id;
 
     private String name;
 
     private String lastName;
-
     private String email;
 
     public PersonDto(long id, String name, String lastName, String email) {

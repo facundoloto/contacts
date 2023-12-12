@@ -1,6 +1,7 @@
 package com.demo.contacts.Crud;
 
 import com.demo.contacts.Handled.HandledErrorDataBase;
+import com.demo.contacts.User.Domain.Dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
@@ -38,24 +39,6 @@ public abstract class ServiceBase<Entity, Dto> {
 
     }
 
-    public Dto update(Long id, Dto dto) throws Exception {
-
-        try {
-            Entity existingEntity = repository.findById(id).orElse(null);
-
-            if (existingEntity == null) {
-                return null;
-            } else {
-                existingEntity = repository.save(existingEntity);
-                return mapToDTO(existingEntity);
-            }
-
-        } catch (Exception e) {
-            throw new Exception(HandledErrorDataBase.UPDATE_ERROR.getMessage(), e);
-        }
-
-    }
-
     public boolean delete(Long id) throws Exception {
         try {
             // Check if the item exists before attempting to delete
@@ -68,6 +51,17 @@ public abstract class ServiceBase<Entity, Dto> {
         } catch (Exception e) {
             throw new Exception(HandledErrorDataBase.DELETE_ERROR.getMessage(), e);
         }
+    }
+
+    /**
+     * @param id
+     * @param dto
+     * @return
+     * @throws Exception
+     * @Description I did this method abstract because each component update data of different ways
+     */
+    public Dto update(Long id, Dto dto) throws Exception {
+        return null;
     }
 
     protected abstract Dto mapToDTO(Entity entity);

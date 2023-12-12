@@ -3,13 +3,13 @@ import com.demo.contacts.Person.PersonEntity;
 import com.demo.contacts.User.Persistence.Entity.UserEntity;
 import jakarta.persistence.*;
 
-@Entity
+@Entity(name = "Contact")
 @Table(name = "contact")
 public class ContactEntity extends PersonEntity {
     @Column(name = "phone_number")
     private Long phoneNumber;
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserEntity user;
 
     public ContactEntity(){

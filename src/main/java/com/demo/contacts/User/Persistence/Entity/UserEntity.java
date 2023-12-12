@@ -12,11 +12,14 @@ public class UserEntity extends PersonEntity {
     @Column
     private String password;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<ContactEntity> contactEntities = new ArrayList<>();
+    private List<ContactEntity> contactEntities;
 
-    public UserEntity(Long id, String name, String lastName, String email, String password, List<ContactEntity> contactEntities) {
+    public UserEntity(Long id, String name, String lastName, String email, String password) {
         super(id, name, lastName, email);
         this.password = password;
+    }
+
+    public UserEntity(List<ContactEntity> contactEntities) {
         this.contactEntities = contactEntities;
     }
 

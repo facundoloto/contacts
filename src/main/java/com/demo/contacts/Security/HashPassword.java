@@ -1,8 +1,8 @@
-package com.demo.contacts.Crypto;
+package com.demo.contacts.Security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-public class CryptPassword {
+public class HashPassword {
     BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Bean

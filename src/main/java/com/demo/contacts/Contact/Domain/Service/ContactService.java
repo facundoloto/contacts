@@ -4,12 +4,41 @@ import com.demo.contacts.Contact.Domain.Dto.ContactDto;
 import com.demo.contacts.Contact.Domain.Repository.ContactRepository;
 import com.demo.contacts.Contact.Persistence.Entity.ContactEntity;
 import com.demo.contacts.Crud.ServiceBase;
+import com.demo.contacts.User.Domain.Repository.UserRepository;
+import com.demo.contacts.User.Persistence.Entity.UserEntity;
+import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
 public class ContactService extends ServiceBase<ContactEntity, ContactDto> {
     private final ContactRepository contactRepository;
-
-    public ContactService(ContactRepository contactRepository) {
+    private final UserRepository userRepository;
+    public ContactService(ContactRepository contactRepository, UserRepository userRepository) {
         this.contactRepository = contactRepository;
+        this.userRepository = userRepository;
+    }
+
+    private ContactEntity setContactToSave(ContactDto contactDto){
+        ContactEntity contact = new ContactEntity();
+        UserEntity user = userRepository.findById(contactDto.getUserId()).orElse(null);
+        contact.setName(contactDto.getName());
+        contact.setLastName(contactDto.getLastName());
+        contact.setEmail(contactDto.getEmail());
+        contact.setPhoneNumber(contactDto.getNumber());
+        contact.setUser(user);
+        return contact;
+    }
+
+    public List<ContactDto> getAllContactsByUser(Long userId){
+        List<ContactEntity> contacts = contactRepository.findContactByUserId(userId);
+        return contacts.stream()
+                .map(contact -> {
+                    ContactDto contactDTO = new ContactDto(contact.getId(), contact.getName(), contact.getLastName(), contact.getEmail(), contact.getPhoneNumber(), userId);
+                    return contactDTO;
+                })
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -19,7 +48,9 @@ public class ContactService extends ServiceBase<ContactEntity, ContactDto> {
 
     @Override
     public ContactDto create(ContactDto contactDto) throws Exception {
-        return super.create(contactDto);
+        ContactEntity contact = this.setContactToSave(contactDto);
+        ContactEntity contactSave= contactRepository.save(contact);
+        return mapToDTO(contactSave);
     }
 
     @Override
@@ -29,8 +60,7 @@ public class ContactService extends ServiceBase<ContactEntity, ContactDto> {
 
     @Override
     public boolean delete(Long id) throws Exception {
-        super.delete(id);
-        return false;
+        return super.delete(id);
     }
 
     @Override
