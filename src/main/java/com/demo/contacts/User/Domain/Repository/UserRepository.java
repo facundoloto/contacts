@@ -15,6 +15,5 @@ Repository works with helps of JPA and contain methods to interact with a DB
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long>{
 //@Query("SELECT u FROM User u WHERE u.email =:email")
-//      UserEntity findByEmail(@Param("email")String email);
 UserEntity findByEmail(String email);
 };

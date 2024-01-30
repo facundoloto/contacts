@@ -38,7 +38,7 @@ public class ContactController {
     public ResponseEntity createContact(@RequestBody ContactDto contactDto) throws Exception {
         System.out.println(contactDto.getUserId());
         ContactDto contact = contactService.create(contactDto);
-        return ResponseEntity.status(HttpStatus.OK).body(contact);
+        return ResponseEntity.status(HttpStatus.OK).body("contact create");
     }
 
     @PutMapping("/update/{id}")
