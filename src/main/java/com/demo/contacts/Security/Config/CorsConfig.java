@@ -1,26 +1,30 @@
 package com.demo.contacts.Security.Config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.context.annotation.Configuration;
+@Configuration
+public class CorsConfig {
 
-public class CorsConfig implements WebMvcConfigurer {
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                        .allowedOrigins("http://localhost:5173")
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                        .allowedHeaders("Origin", "Content-Type", "Accept", "Authorization")
+                        .allowCredentials(true);
 
-    //configuration of cors to accept requests from front-end
-    @Override
-    public void addCorsMappings(CorsRegistry registry){
-        registry.addMapping("/**")//this affects all routes api
-                .allowedOrigins("*")//accepts all routes external
-                .allowedMethods("GET", "POST", "PUT", "DELETE")
-                .allowedHeaders("origin", "Content-Type", "Accept", "Authorization")
-                .allowCredentials(true)
-                .maxAge(3600);
-
-        registry.addMapping("/auth/**")//this only route login
-                .allowedOrigins("*")
-                .allowedMethods("GET", "POST", "PUT", "DELETE")
-                .allowedHeaders("origin", "Content-Type", "Accept", "Authorization")
-                .allowCredentials(false)
-                .maxAge(3600);
-
+                registry.addMapping("/auth/**")
+                        .allowedOrigins("http://localhost:5173")
+                        .allowedMethods("OPTIONS", "POST")
+                        .allowedHeaders("Origin", "Content-Type", "Accept", "Authorization")
+                        .allowCredentials(false);
+            }
+        };
     }
+
 }

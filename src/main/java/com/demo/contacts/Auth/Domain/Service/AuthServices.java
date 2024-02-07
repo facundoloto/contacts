@@ -1,10 +1,13 @@
 package com.demo.contacts.Auth.Domain.Service;
 
+import com.demo.contacts.Auth.Domain.Dto.AuthDto;
 import com.demo.contacts.Auth.Domain.Dto.LoginDto;
 import com.demo.contacts.Security.Jwt.IJWTUtilityServices;
 import com.demo.contacts.User.Domain.Repository.UserRepository;
 import com.demo.contacts.User.Persistence.Entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +32,7 @@ public class AuthServices implements IAuthServices {
      * @return A HashMap with either a JWT or an error message.
      * @throws Exception If an error occurs during the login process.
      */
+
     public HashMap<String, String> login(LoginDto loginRequest) throws Exception {
         try {
             // Initialize a HashMap to store the result (JWT or error message)
@@ -46,6 +50,11 @@ public class AuthServices implements IAuthServices {
             // Verify the password provided in the login request
             if (verifyPassword(loginRequest.getPassword(), user.get().getPassword())) {
                 // If the password is correct, generate a JWT and add it to the HashMap
+
+
+                jwt.put("id", String.valueOf(user.get().getId()));
+                jwt.put("Name", user.get().getName());
+                jwt.put("LastName", user.get().getLastName());
                 jwt.put("jwt", jwtUtilityService.generateJWT(user.get().getId()));
             } else {
                 // If authentication fails, add an error message to the HashMap
@@ -64,7 +73,6 @@ public class AuthServices implements IAuthServices {
             throw new Exception("Unknown error", e);
         }
     }
-
 
     @Override
 /**

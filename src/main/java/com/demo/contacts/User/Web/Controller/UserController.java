@@ -19,21 +19,6 @@ public class UserController {
         this.userService = userService;
     }
 
-//    @GetMapping("/{id}")
-//    public ResponseEntity getUserById(@PathVariable long id) throws Exception {
-//        return responseController.ResponseStatusHttp(userService.getById(id));
-//    }
-
-//    @PostMapping("/")
-//    public ResponseEntity createUser(@RequestBody UserDto userDTO) throws Exception {
-//        CryptPassword cryptPassword = new CryptPassword();
-//        String hashPassword = cryptPassword.encoder(userDTO.getPassword());
-//        userDTO.setPassword(hashPassword);
-//        UserDto user = userService.create(userDTO);
-//
-//        return responseController.ResponseStatusHttp(user);
-//    }
-
     @PutMapping("/update/{id}")
     public ResponseEntity updateUser(@PathVariable long id, @RequestBody UserDto userDto) throws Exception {
         HashPassword cryptPassword = new HashPassword();
