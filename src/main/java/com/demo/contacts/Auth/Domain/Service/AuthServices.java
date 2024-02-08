@@ -99,6 +99,7 @@ public class AuthServices implements IAuthServices {
             // Check if the provided user already exists in the database
             for (UserEntity repeatFields : getAllUsers) {
                 if (Objects.equals(repeatFields.getEmail(), user.getEmail())) {
+                    response.put("created", String.valueOf(false));
                     response.put("message", "User already exists!");
                     return response;
                 }
@@ -112,6 +113,7 @@ public class AuthServices implements IAuthServices {
             userRepository.save(user);
 
             // Add a success message to the response HashMap
+            response.put("created", String.valueOf(true));
             response.put("message", "User created successfully!");
 
             // Return the final response

@@ -18,7 +18,14 @@ public class AuthController {
 
     @PostMapping("/register/")
     private ResponseEntity<HashMap<String, String>> addUser(@RequestBody UserEntity user) throws Exception {
-        return new ResponseEntity<>(authService.register(user), HttpStatus.OK);
+        HashMap<String, String> register= authService.register(user);
+        if(register.get("created")=="true"){
+            return new ResponseEntity<>(authService.register(user), HttpStatus.CREATED);
+        }
+        else{
+            return new ResponseEntity<>(authService.register(user), HttpStatus.FORBIDDEN);
+
+        }
     }
 
     @PostMapping("/login/")
