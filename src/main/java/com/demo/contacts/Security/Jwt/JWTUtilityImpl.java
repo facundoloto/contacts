@@ -53,7 +53,7 @@ public class JWTUtilityImpl implements IJWTUtilityServices {
         JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
                 .subject(userId.toString())
                 .issueTime(now)
-                .expirationTime(new Date(now.getTime()+14400000))//time to expire token
+                .expirationTime(new Date(now.getTime()+944000000))//time to expire token
                 .build();
 
         //encrypt the token

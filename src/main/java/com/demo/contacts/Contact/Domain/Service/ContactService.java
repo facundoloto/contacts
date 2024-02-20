@@ -6,9 +6,11 @@ import com.demo.contacts.Contact.Persistence.Entity.ContactEntity;
 import com.demo.contacts.Crud.ServiceBase;
 import com.demo.contacts.User.Domain.Repository.UserRepository;
 import com.demo.contacts.User.Persistence.Entity.UserEntity;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -55,19 +57,32 @@ public class ContactService extends ServiceBase<ContactEntity, ContactDto> {
 
     @Override
     public ContactDto update(Long id, ContactDto contactDto) throws Exception {
-        return super.update(id, contactDto);
-    }
+        Optional<ContactEntity> existingContact = contactRepository.findById(id);
 
+        if (existingContact.isPresent()) {
+            ContactEntity contact = existingContact.get();
+            UserEntity user = userRepository.findById(contactDto.getUserId()).orElse(null);
+
+            contact.setName(contactDto.getName());
+            contact.setLastName(contactDto.getLastName());
+            contact.setEmail(contactDto.getEmail());
+            contact.setPhoneNumber(contactDto.getNumber());
+            contact.setUser(user);
+
+            ContactEntity updateContact = contactRepository.save(contact);
+            return mapToDTO(updateContact);
+        } else {
+            throw new ChangeSetPersister.NotFoundException();
+        }
+    }
     @Override
     public boolean delete(Long id) throws Exception {
         return super.delete(id);
     }
-
     @Override
     protected ContactDto mapToDTO(ContactEntity contactEntity) {
         return null;
     }
-
     @Override
     protected ContactEntity mapToEntity(ContactDto contactDto) {
         return null;
