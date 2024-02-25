@@ -20,6 +20,7 @@ public class CorsConfig {
 
                 registry.addMapping("/auth/**")
                         .allowedOrigins("https://enchanting-froyo-dab782.netlify.app")
+                        .allowedOrigins("http://localhost:5173")
                         .allowedMethods("OPTIONS", "POST")
                         .allowedHeaders("Origin", "Content-Type", "Accept", "Authorization")
                         .allowCredentials(false);
