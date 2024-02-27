@@ -13,15 +13,15 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-//                        .allowedOrigins("https://enchanting-froyo-dab782.netlify.app")
-                        .allowedOrigins("http://localhost:5173")
+                        .allowedOrigins("https://enchanting-froyo-dab782.netlify.app")
+//                        .allowedOrigins("http://localhost:5173")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("Origin", "Content-Type", "Accept", "Authorization")
                         .allowCredentials(true);
 
                 registry.addMapping("/auth/**")
-//                        .allowedOrigins("https://enchanting-froyo-dab782.netlify.app")
-                        .allowedOrigins("http://localhost:5173")
+                        .allowedOrigins("https://enchanting-froyo-dab782.netlify.app")
+//                        .allowedOrigins("http://localhost:5173")
                         .allowedOrigins("http://localhost:5173")
                         .allowedMethods("OPTIONS", "POST")
                         .allowedHeaders("Origin", "Content-Type", "Accept", "Authorization")
