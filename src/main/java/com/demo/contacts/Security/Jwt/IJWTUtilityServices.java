@@ -12,5 +12,7 @@ public interface IJWTUtilityServices {
 
     //this works as a contract where make the implementation not changes the function of the method
     public String generateJWT(Long userId) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException, JOSEException;
+
     public JWTClaimsSet parseJWT(String jwt) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException, JOSEException, ParseException;
+
 }

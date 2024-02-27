@@ -10,6 +10,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -46,16 +47,14 @@ public class JWTUtilityImpl implements IJWTUtilityServices {
     @Override
     public String generateJWT(Long userId) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException, JOSEException {
         PrivateKey privateKey = loadPrivateKey(privateKeyPrivate);
-
         JWSSigner signer = new RSASSASigner(privateKey);
         Date now = new Date();
-        //set the token
+
         JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
                 .subject(userId.toString())
                 .issueTime(now)
                 .expirationTime(new Date(now.getTime()+944000000))//miliseconds time to expire token
                 .build();
-
         //encrypt the token
         SignedJWT signedJWT = new SignedJWT(new JWSHeader(JWSAlgorithm.RS256), claimsSet);
         signedJWT.sign(signer);
@@ -69,9 +68,7 @@ public class JWTUtilityImpl implements IJWTUtilityServices {
     @Override
     public JWTClaimsSet parseJWT(String jwt) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException, JOSEException, ParseException {
         PublicKey publicKey = loadPublicKey(publicKeyPublic);
-
         SignedJWT signedJWT = SignedJWT.parse(jwt);
-
         JWSVerifier verifier = new RSASSAVerifier((RSAPublicKey) publicKey);
 
         if(!signedJWT.verify(verifier)){
@@ -88,32 +85,49 @@ public class JWTUtilityImpl implements IJWTUtilityServices {
     }
 
     //this method load public form folder resources and parse pem to a key
-
-    private PrivateKey loadPrivateKey(Resource resource) throws IOException, InvalidKeySpecException, NoSuchAlgorithmException {
-        byte[] keyBytes = Files.readAllBytes(Paths.get(resource.getURI()));
-        String privateKeyPEM = new String(keyBytes, StandardCharsets.UTF_8)
-                .replace("-----BEGIN PRIVATE KEY-----", "")
-                .replace("-----END PRIVATE KEY-----", "")
+    private byte[] decodeBase64Key(byte[] keyBytes, String typeKey){
+        String KeyPEM = new String(keyBytes, StandardCharsets.UTF_8)
+                .replace("-----BEGIN "+typeKey+" KEY-----", "")
+                .replace("-----END "+typeKey+" KEY-----", "")
                 .replaceAll("\\s", "");
-
-        byte[] decodedKey = Base64.getDecoder().decode(privateKeyPEM);
-
-        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-        return keyFactory.generatePrivate(new PKCS8EncodedKeySpec(decodedKey));
+        byte[] decodedKey = Base64.getDecoder().decode(KeyPEM);
+        return decodedKey;
     }
 
-    private PublicKey loadPublicKey(Resource resource) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
-        byte[] keyBytes = Files.readAllBytes(Paths.get(resource.getURI()));
-        String publicKeyPEM = new String(keyBytes, StandardCharsets.UTF_8)
-                .replace("-----BEGIN PUBLIC KEY-----", "")
-                .replace("-----END PUBLIC KEY-----", "")
-                .replaceAll("\\s", "");
+    private byte[] readKeyBytes(InputStream inputStream) throws IOException {
+        return inputStream.readAllBytes();
+    }
 
-        byte[] decodedKey = Base64.getDecoder().decode(publicKeyPEM);
-
+    private PublicKey generatePublicKey(byte[] decodedKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
         return keyFactory.generatePublic(new X509EncodedKeySpec(decodedKey));
     }
+
+    private PrivateKey generatePrivateKey(byte[] decodedKey) throws NoSuchAlgorithmException, InvalidKeySpecException{
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        return keyFactory.generatePrivate(new PKCS8EncodedKeySpec(decodedKey));
+    }
+    private PublicKey loadPublicKey(Resource resource)  {
+        try (InputStream inputStream = resource.getInputStream()) {
+            byte[] keyBytes = readKeyBytes(inputStream);
+            byte[] decodedKey = decodeBase64Key(keyBytes, "PUBLIC");
+
+            return generatePublicKey(decodedKey);
+        } catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException e) {
+            throw new RuntimeException("Error loading key from resource", e);
+        }
+    }
+    private PrivateKey loadPrivateKey(Resource resource)  {
+        try (InputStream inputStream = resource.getInputStream()) {
+            byte[] keyBytes = readKeyBytes(inputStream);
+            byte[] decodedKey = decodeBase64Key(keyBytes, "PRIVATE");
+
+            return generatePrivateKey(decodedKey);
+        } catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException e) {
+            throw new RuntimeException("Error loading public key from resource", e);
+        }
+    }
+
 }
 
 //make a catch when token expired
